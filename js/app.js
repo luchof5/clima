@@ -55,6 +55,8 @@ function consultarAPI(ciudad, pais) {
 
     const url =  `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
 
+    Spinner();
+
     fetch(url)
         .then(respusta => respusta.json())
         .then(datos => {
@@ -74,17 +76,39 @@ function consultarAPI(ciudad, pais) {
 
 
 function mostarClima(datos) {
-    const { main: {temp, temp_max, temp_min } } = datos;
+    const { name, main: {temp, temp_max, temp_min } } = datos;
 
     const centigrados = kelvinAcentigrados(temp);
+    const max = kelvinAcentigrados(temp_max);
+    const min = kelvinAcentigrados(temp_min);
 
+    // Nombre de la ciudad q se consulto
+    const nombreCiudad = document.createElement('p');
+    nombreCiudad.textContent = `CLima en ${name}`;
+    nombreCiudad.classList.add('font-bold', 'text-2xl');
+
+    // Temperatura actual
     const actual = document.createElement('p');
     actual.innerHTML = `${centigrados} &#8451;`;
     actual.classList.add('font-bold', 'text-6xl');
 
+    // Temperatura maxima
+    const tempMaxima = document.createElement('p');
+    tempMaxima.innerHTML = `Max: ${max} &#8451;`;
+    tempMaxima.classList.add('text-xl');
+
+    // Temperatura minima
+    const tempMinima = document.createElement('p');
+    tempMinima.innerHTML = `Min: ${min} &#8451;`;
+    tempMinima.classList.add('text-xl');
+
+    // Agregamos todo al html
     const resultadoDiv = document.createElement('div');
     resultadoDiv.classList.add('text-center', 'text-white');
+    resultadoDiv.appendChild(nombreCiudad);
     resultadoDiv.appendChild(actual);
+    resultadoDiv.appendChild(tempMaxima);
+    resultadoDiv.appendChild(tempMinima);
 
     resultado.appendChild(resultadoDiv)
 }
@@ -96,4 +120,29 @@ function limparHTML() {
     while(resultado.firstChild) {
         resultado.removeChild(resultado.firstChild);
     }
+}
+
+function Spinner() {
+
+    limparHTML();
+
+    const divSpinenr = document.createElement('div');
+    divSpinenr.classList.add('sk-fading-circle');
+
+    divSpinenr.innerHTML = `
+        <div class="sk-circle1 sk-circle"></div>
+        <div class="sk-circle2 sk-circle"></div>
+        <div class="sk-circle3 sk-circle"></div>
+        <div class="sk-circle4 sk-circle"></div>
+        <div class="sk-circle5 sk-circle"></div>
+        <div class="sk-circle6 sk-circle"></div>
+        <div class="sk-circle7 sk-circle"></div>
+        <div class="sk-circle8 sk-circle"></div>
+        <div class="sk-circle9 sk-circle"></div>
+        <div class="sk-circle10 sk-circle"></div>
+        <div class="sk-circle11 sk-circle"></div>
+        <div class="sk-circle12 sk-circle"></div>
+    `;
+
+    resultado.appendChild(divSpinenr);
 }
